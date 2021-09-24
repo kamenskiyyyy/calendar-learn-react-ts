@@ -1,12 +1,13 @@
 import React from 'react';
-import {Route, Switch} from "react-router-dom";
-import {privateRoutes, publicRoutes} from "../router";
+import {Redirect, Route, Switch} from "react-router-dom";
+import {privateRoutes, publicRoutes, RouteNames} from "../router";
+import {useTypedSelector} from "../hooks/useTypedSelector";
 
 const AppRouter = () => {
-  const auth = true;
+  const {isAuth} = useTypedSelector(state => state.auth)
 
   return (
-    auth
+    isAuth
       ? <Switch>
         {privateRoutes.map(route =>
           <Route path={route.path}
@@ -15,6 +16,7 @@ const AppRouter = () => {
                  key={route.path}
           />
         )}
+      <Redirect to={RouteNames.EVENT}/>
       </Switch>
       : <Switch>
         {publicRoutes.map(route =>
@@ -24,8 +26,8 @@ const AppRouter = () => {
                  key={route.path}
           />
         )}
+        <Redirect to={RouteNames.LOGIN}/>
       </Switch>
-
   );
 };
 
